@@ -136,6 +136,11 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   // When a real HTTP response is received:
   const body = await response.json().catch(() => undefined);
   if (!response.ok) {
+    // If static hosting (GitHub Pages) returns 404 HTML without a structured API error body:
+    if (response.status === 404 && (!body || !body.error)) {
+      return handleMockFallback<T>(path, init);
+    }
+
     const message = body?.error?.message ?? `Request failed with status ${response.status}.`;
     const err = new Error(message) as Error & { status?: number };
     err.status = response.status;
