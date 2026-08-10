@@ -2,7 +2,7 @@
   "name": "a11yfix",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@11.16.0",
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
     "dev": "pnpm --parallel --filter @a11yfix/api --filter @a11yfix/web dev",
     "build": "pnpm -r build",
