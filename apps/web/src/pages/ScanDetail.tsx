@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
-import type { ScanWithViolations } from "@a11yfix/shared-types";
+import type { ScanWithViolations, Violation } from "@a11yfix/shared-types";
 import { generateFix, getScan } from "../api/client";
 import ViolationCard from "../components/ViolationCard";
 
@@ -69,7 +69,7 @@ export default function ScanDetail() {
       </div>
 
       <div className="space-y-4">
-        {scan.violations.map((violation) => (
+        {scan.violations.map((violation: Violation) => (
           <ViolationCard
             key={violation.id}
             violation={violation}

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Plus } from "lucide-react";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import type { SiteSummary } from "@a11yfix/shared-types";
 import { listSites } from "../api/client";
 
 export default function Dashboard() {
@@ -47,7 +48,7 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200">
-              {data.map((site) => {
+              {data.map((site: SiteSummary) => {
                 const latest = site.recentScans[0];
                 const chartData = [...site.recentScans].reverse().map((scan, index) => ({
                   name: `S${index + 1}`,
