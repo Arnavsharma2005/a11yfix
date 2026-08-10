@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -12,6 +11,5 @@
       "@a11yfix/shared-types": ["../../packages/shared-types/src/index.ts"]
     }
   },
-  "include": ["src", "vite.config.ts"],
-  "references": [{ "path": "../../packages/shared-types" }]
+  "include": ["src", "vite.config.ts"]
 }

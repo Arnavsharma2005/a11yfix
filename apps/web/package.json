@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b tsconfig.json && vite build",
-    "typecheck": "tsc -b tsconfig.json",
+    "build": "tsc && vite build",
+    "typecheck": "tsc",
     "test": "echo \"No web tests yet\""
   },
   "dependencies": {
