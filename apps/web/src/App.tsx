@@ -1,5 +1,5 @@
 import { Link, NavLink, Route, Routes } from "react-router-dom";
-import { ClipboardList, Plus, ShieldCheck } from "lucide-react";
+import { ClipboardList, Info, Plus, ShieldCheck } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
 import NewScan from "./pages/NewScan";
 import ScanDetail from "./pages/ScanDetail";
@@ -7,6 +7,12 @@ import ScanDetail from "./pages/ScanDetail";
 export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-zinc-950">
+      <div className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs font-medium text-amber-900">
+        <span className="inline-flex items-center gap-1.5">
+          <Info className="h-3.5 w-3.5 text-amber-600" aria-hidden="true" />
+          Interactive Preview Mode — Exploring WCAG accessibility scans and AI fix generation with sample data.
+        </span>
+      </div>
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link to="/" className="flex items-center gap-2 text-lg font-semibold">
