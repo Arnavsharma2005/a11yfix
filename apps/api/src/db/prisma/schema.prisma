@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  githubId    String   @unique
+  githubLogin String
+  accessToken String
+  createdAt   DateTime @default(now())
+  sites       Site[]
+}
+
+model Site {
+  id          String   @id @default(cuid())
+  url         String
+  name        String?
+  githubRepo  String?
+  ownerUserId String
+  owner       User     @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  scans       Scan[]
+
+  @@index([ownerUserId])
+}
+
+model Scan {
+  id           String        @id @default(cuid())
+  siteId       String
+  site         Site          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  status       ScanStatus    @default(QUEUED)
+  pagesScanned Int           @default(0)
+  startedAt    DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime      @default(now())
+  violations   Violation[]
+  pages        ScannedPage[]
+
+  @@index([siteId])
+  @@index([status])
+}
+
+enum ScanStatus {
+  QUEUED
+  CRAWLING
+  SCANNING
+  COMPLETED
+  FAILED
+}
+
+model ScannedPage {
+  id        String   @id @default(cuid())
+  scanId    String
+  scan      Scan     @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  pageUrl   String
+  title     String?
+  rawHtml   String   @db.Text
+  createdAt DateTime @default(now())
+
+  @@unique([scanId, pageUrl])
+  @@index([scanId])
+}
+
+model Violation {
+  id            String          @id @default(cuid())
+  scanId        String
+  scan          Scan            @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  pageUrl       String
+  ruleId        String
+  wcagCriteria  String
+  impact        String
+  selector      String
+  htmlSnippet   String
+  description   String
+  priorityScore Int
+  fixAvailable  Boolean         @default(false)
+  suggestedFix  String?
+  status        ViolationStatus @default(OPEN)
+  metadata      Json?
+  prUrl         String?
+
+  @@index([scanId])
+  @@index([ruleId])
+  @@index([priorityScore])
+}
+
+enum ViolationStatus {
+  OPEN
+  FIX_GENERATED
+  PR_OPENED
+  RESOLVED
+  IGNORED
+}

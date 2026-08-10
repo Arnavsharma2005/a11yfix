@@ -1,0 +1,53 @@
+{
+  "name": "@a11yfix/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "dotenv -e ../../.env -- tsx watch src/index.ts",
+    "worker": "dotenv -e ../../.env -- tsx watch src/jobs/scan.worker.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -b tsconfig.json",
+    "test": "vitest run",
+    "prisma:generate": "dotenv -e ../../.env -- prisma generate --schema src/db/prisma/schema.prisma",
+    "prisma:migrate": "dotenv -e ../../.env -- prisma migrate dev --schema src/db/prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@a11yfix/shared-types": "workspace:*",
+    "@axe-core/puppeteer": "latest",
+    "@octokit/rest": "^21.0.2",
+    "@prisma/client": "^6.1.0",
+    "axe-core": "latest",
+    "bullmq": "^5.34.2",
+    "cors": "^2.8.5",
+    "css-select": "^5.1.0",
+    "diff": "^7.0.0",
+    "domhandler": "^5.0.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "ioredis": "^5.4.2",
+    "morgan": "^1.10.0",
+    "parse5": "^7.2.1",
+    "parse5-htmlparser2-tree-adapter": "^7.1.0",
+    "puppeteer": "latest",
+    "simple-git": "^3.27.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/diff": "^7.0.0",
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.1",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.10.2",
+    "@types/supertest": "^6.0.2",
+    "prisma": "^6.1.0",
+    "supertest": "^7.0.0",
+    "dotenv-cli": "^8.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

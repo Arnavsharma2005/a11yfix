@@ -1,0 +1,17 @@
+{
+  "name": "a11yfix",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.16.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @a11yfix/api --filter @a11yfix/web dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r --sort typecheck",
+    "test": "pnpm -r test",
+    "prisma:generate": "pnpm --filter @a11yfix/api prisma:generate",
+    "prisma:migrate": "pnpm --filter @a11yfix/api prisma:migrate"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
