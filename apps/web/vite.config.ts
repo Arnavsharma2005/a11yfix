@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: process.env.GITHUB_PAGES === "true" ? "/a11yfix/" : "/",
   resolve: {
     alias: {
       "@a11yfix/shared-types": path.resolve(__dirname, "../../packages/shared-types/src")
