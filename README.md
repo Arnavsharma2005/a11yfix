@@ -1,6 +1,19 @@
 # A11yFix
 
-A11yFix crawls a public website, runs real WCAG 2.1 AA checks with axe-core in Puppeteer, ranks violations by user impact, and generates conservative code-level fixes for safe rule types.
+A11yFix is an accessibility audit-as-a-service project. It crawls a public website, runs real WCAG 2.1 AA checks with axe-core in Puppeteer, ranks violations by real-world user impact, and generates conservative code-level fixes for safe rule types.
+
+The project is designed as a portfolio-grade full-stack system: React frontend, Express API, Redis-backed jobs, PostgreSQL persistence, Puppeteer scanning, and optional GitHub pull request automation.
+
+## Documentation
+
+- [Getting Started](docs/getting-started.md)
+- [Architecture](docs/architecture.md)
+- [API Reference](docs/api-reference.md)
+- [Scanning and Prioritization](docs/scanning-and-prioritization.md)
+- [Fix Generation](docs/fix-generation.md)
+- [Security Notes](docs/security.md)
+- [Deployment Guide](docs/deployment.md)
+- [Project Roadmap](docs/roadmap.md)
 
 ## What is implemented
 
@@ -90,6 +103,23 @@ Errors use:
 ```bash
 pnpm test
 pnpm typecheck
+pnpm build
 ```
 
 Current focused tests cover the prioritization algorithm and rule-to-fix generation.
+
+## Repository Layout
+
+```txt
+apps/api                 Express API, Prisma schema, scanner, queue worker
+apps/web                 React/Vite frontend
+packages/shared-types    Shared TypeScript API/domain types
+docs                     Project documentation
+docker-compose.yml       Local Postgres and Redis services
+```
+
+## Current Limitations
+
+- The GitHub PR automation currently applies confident static HTML source fixes. JSX/TSX AST edits are described in the design but intentionally skipped unless a safe source match exists.
+- Docker, Postgres, and Redis are required for the full scan pipeline.
+- Color contrast fixes are suggestions only because brand color changes should be reviewed by a human.
