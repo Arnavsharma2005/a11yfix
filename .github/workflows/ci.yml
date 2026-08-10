@@ -29,11 +29,11 @@ jobs:
       - name: Generate Prisma client
         run: pnpm prisma:generate
 
+      - name: Build packages
+        run: pnpm build
+
       - name: Typecheck
         run: pnpm typecheck
 
       - name: Test
         run: pnpm test
-
-      - name: Build
-        run: pnpm build
