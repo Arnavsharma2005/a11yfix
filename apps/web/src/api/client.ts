@@ -114,12 +114,13 @@ const MOCK_SITES: SiteSummary[] = [
   }
 ];
 
-let dynamicSites = [...MOCK_SITES];
-let dynamicViolations = [...MOCK_VIOLATIONS];
+const dynamicSites = [...MOCK_SITES];
+const dynamicViolations = [...MOCK_VIOLATIONS];
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  let response: Response;
   try {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
+    response = await fetch(`${API_BASE_URL}${path}`, {
       credentials: "include",
       headers: {
         "content-type": "application/json",
@@ -127,22 +128,29 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
       },
       ...init
     });
-
-    const body = await response.json().catch(() => undefined);
-    if (!response.ok) {
-      const message = body?.error?.message ?? "Request failed.";
-      throw new Error(message);
-    }
-
-    return body as T;
-  } catch (err) {
-    // If backend API is not available or returned non-200 on hosted static site, fall back to interactive demo data
+  } catch (_fetchErr) {
+    // If fetch failed completely (backend offline or static GitHub Pages mode), fall back to interactive demo data
     return handleMockFallback<T>(path, init);
   }
+
+  // When a real HTTP response is received:
+  const body = await response.json().catch(() => undefined);
+  if (!response.ok) {
+    const message = body?.error?.message ?? `Request failed with status ${response.status}.`;
+    const err = new Error(message) as Error & { status?: number };
+    err.status = response.status;
+    throw err;
+  }
+
+  return body as T;
 }
 
 function handleMockFallback<T>(path: string, init: RequestInit): T {
   const method = (init.method ?? "GET").toUpperCase();
+
+  if (path === "/github/me" && method === "GET") {
+    return { id: "demo-user-id", githubLogin: "demo-developer" } as unknown as T;
+  }
 
   if (path === "/sites" && method === "GET") {
     return dynamicSites as unknown as T;
@@ -164,6 +172,16 @@ function handleMockFallback<T>(path: string, init: RequestInit): T {
     };
     dynamicSites.unshift(summary);
     return newSite as unknown as T;
+  }
+
+  if (path.includes("/github-connect") && method === "POST") {
+    const body = JSON.parse((init.body as string) ?? "{}");
+    const siteId = path.split("/")[2];
+    const targetSite = dynamicSites.find((s) => s.id === siteId) || dynamicSites[0];
+    if (targetSite) {
+      targetSite.githubRepo = body.githubRepo;
+    }
+    return targetSite as unknown as T;
   }
 
   if (path.startsWith("/sites/") && path.endsWith("/scans") && method === "POST") {
@@ -194,11 +212,13 @@ function handleMockFallback<T>(path: string, init: RequestInit): T {
     return newScan as unknown as T;
   }
 
-  if (path.startsWith("/scans/") && !path.includes("status") && !path.includes("generate-fix") && method === "GET") {
+  if (path.startsWith("/scans/") && !path.includes("status") && !path.includes("generate-fix") && !path.includes("open-pr") && method === "GET") {
     const scanId = path.split("/")[2];
+    const parentSite = dynamicSites.find((s) => s.id === "demo-site-1") || dynamicSites[0];
     const scan: ScanWithViolations = {
       id: scanId,
-      siteId: "demo-site-1",
+      siteId: parentSite.id,
+      site: parentSite,
       status: "COMPLETED",
       pagesScanned: 6,
       startedAt: new Date(Date.now() - 3600000).toISOString(),
@@ -224,7 +244,22 @@ function handleMockFallback<T>(path: string, init: RequestInit): T {
     }
   }
 
+  if (path.includes("/open-pr") && method === "POST") {
+    const prUrl = "https://github.com/acme/store-frontend/pull/42";
+    dynamicViolations.forEach((v) => {
+      if (v.status === "FIX_GENERATED") {
+        v.status = "PR_OPENED";
+        v.prUrl = prUrl;
+      }
+    });
+    return { prUrl, prUrls: [prUrl] } as unknown as T;
+  }
+
   return [] as unknown as T;
+}
+
+export function getCurrentUser(): Promise<{ id: string; githubLogin: string }> {
+  return request<{ id: string; githubLogin: string }>("/github/me");
 }
 
 export function listSites(): Promise<SiteSummary[]> {
@@ -235,6 +270,13 @@ export function createSite(payload: { url: string; name?: string }): Promise<Sit
   return request<Site>("/sites", {
     method: "POST",
     body: JSON.stringify(payload)
+  });
+}
+
+export function githubConnect(siteId: string, githubRepo: string): Promise<Site> {
+  return request<Site>(`/sites/${siteId}/github-connect`, {
+    method: "POST",
+    body: JSON.stringify({ githubRepo })
   });
 }
 
@@ -255,6 +297,13 @@ export function getScanStatus(scanId: string): Promise<ScanStatusResponse> {
 
 export function generateFix(scanId: string, violationId: string): Promise<Violation> {
   return request<Violation>(`/scans/${scanId}/violations/${violationId}/generate-fix`, {
+    method: "POST",
+    body: JSON.stringify({})
+  });
+}
+
+export function openPr(scanId: string): Promise<{ prUrl: string; prUrls: string[] }> {
+  return request<{ prUrl: string; prUrls: string[] }>(`/scans/${scanId}/open-pr`, {
     method: "POST",
     body: JSON.stringify({})
   });

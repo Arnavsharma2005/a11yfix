@@ -41,6 +41,7 @@ export interface Violation {
 }
 
 export interface ScanWithViolations extends Scan {
+  site: Site;
   violations: Violation[];
 }
 

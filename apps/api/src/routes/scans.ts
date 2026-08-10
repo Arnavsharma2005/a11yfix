@@ -21,7 +21,8 @@ router.get(
         }
       },
       include: {
-        violations: true
+        violations: true,
+        site: true
       }
     });
 
