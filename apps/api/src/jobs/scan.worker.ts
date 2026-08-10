@@ -51,7 +51,7 @@ export async function processScanJob(scanId: string): Promise<void> {
       ruleCounts.set(violation.ruleId, (ruleCounts.get(violation.ruleId) ?? 0) + 1);
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       for (const page of pages) {
         await tx.scannedPage.create({
           data: {
@@ -86,7 +86,7 @@ export async function processScanJob(scanId: string): Promise<void> {
             description: violation.description,
             priorityScore: priority.priorityScore,
             fixAvailable: isAutoFixableRule(violation.ruleId),
-            metadata: violation.metadata as Prisma.InputJsonValue
+            metadata: (violation.metadata ?? {}) as any
           }
         });
       }

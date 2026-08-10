@@ -68,7 +68,7 @@ export async function openPullRequestsForScan(scanId: string, userId: string): P
       defaultBranch,
       branchName: `a11yfix/scan-${scan.id}-${batchIndex + 1}`,
       scanId: scan.id,
-      violations: batches[batchIndex],
+      violations: batches[batchIndex] as RepoViolation[],
       pages: scan.pages
     });
 

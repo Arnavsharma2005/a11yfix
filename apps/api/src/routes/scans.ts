@@ -27,7 +27,7 @@ router.get(
 
     if (!scan) throw notFound("Scan not found.");
 
-    scan.violations.sort((a, b) => {
+    scan.violations.sort((a: any, b: any) => {
       const scoreDelta = b.priorityScore - a.priorityScore;
       if (scoreDelta !== 0) return scoreDelta;
 

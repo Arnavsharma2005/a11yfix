@@ -75,11 +75,11 @@ router.get(
       }
     });
 
-    const payload = sites.map(({ scans, ...site }) => ({
+    const payload = sites.map(({ scans, ...site }: any) => ({
       ...site,
-      recentScans: scans.map((scan) => {
+      recentScans: scans.map((scan: any) => {
         const totalViolations = scan.violations.length;
-        const totalPriority = scan.violations.reduce((sum, violation) => sum + violation.priorityScore, 0);
+        const totalPriority = scan.violations.reduce((sum: number, violation: any) => sum + violation.priorityScore, 0);
         return {
           id: scan.id,
           status: scan.status,
