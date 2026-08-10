@@ -36,11 +36,13 @@ jobs:
       - name: Generate Prisma client
         run: pnpm prisma:generate
 
-      - name: Build workspace packages & web app
+      - name: Build Web App and Dependencies
         env:
           GITHUB_PAGES: 'true'
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || '/api' }}
-        run: pnpm build
+        run: |
+          pnpm --filter @a11yfix/shared-types build
+          pnpm --filter @a11yfix/web build
 
       - name: Create 404.html fallback for SPA routing
         run: cp apps/web/dist/index.html apps/web/dist/404.html
