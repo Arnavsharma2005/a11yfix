@@ -5,7 +5,7 @@
   "types": "src/index.ts",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -b tsconfig.json",
     "typecheck": "tsc -b tsconfig.json",
     "test": "echo \"No shared package tests yet\""
   },
