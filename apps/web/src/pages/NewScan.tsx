@@ -30,36 +30,36 @@ export default function NewScan() {
   return (
     <section className="max-w-2xl">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-50 text-signal">
           <ShieldCheck className="h-5 w-5" aria-hidden="true" />
         </div>
         <div>
-          <h1 className="text-2xl font-semibold tracking-normal">New Scan</h1>
-          <p className="text-sm text-zinc-600">Submit a public website URL.</p>
+          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">New Scan</h1>
+          <p className="text-sm text-slate">Submit a public website URL.</p>
         </div>
       </div>
 
-      <form onSubmit={onSubmit} className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+      <form onSubmit={onSubmit} className="space-y-4 rounded-lg border border-hairline bg-surface p-5 shadow-sm">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium text-zinc-800">Website URL</span>
+          <span className="mb-1 block text-sm font-medium text-ink">Website URL</span>
           <input
             required
             type="url"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
             placeholder="https://example.org"
-            className="h-11 w-full rounded-lg border border-zinc-300 px-3 text-sm outline-none ring-emerald-500 focus:ring-2"
+            className="h-11 w-full rounded-lg border border-hairline px-3 text-sm text-ink outline-none ring-signal focus:ring-2"
           />
         </label>
 
         <label className="block">
-          <span className="mb-1 block text-sm font-medium text-zinc-800">Site name</span>
+          <span className="mb-1 block text-sm font-medium text-ink">Site name</span>
           <input
             type="text"
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Example Org"
-            className="h-11 w-full rounded-lg border border-zinc-300 px-3 text-sm outline-none ring-emerald-500 focus:ring-2"
+            className="h-11 w-full rounded-lg border border-hairline px-3 text-sm text-ink outline-none ring-signal focus:ring-2"
           />
         </label>
 
@@ -68,7 +68,7 @@ export default function NewScan() {
         <button
           type="submit"
           disabled={mutation.isPending}
-          className="inline-flex h-10 items-center gap-2 rounded-lg bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-10 items-center gap-2 rounded-lg bg-signal px-4 text-sm font-semibold text-white transition-colors hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Play className="h-4 w-4" aria-hidden="true" />
           {mutation.isPending ? "Starting" : "Start Scan"}

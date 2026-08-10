@@ -29,7 +29,7 @@ export default function ScanDetail() {
     }
   });
 
-  if (scanQuery.isLoading) return <p className="text-sm text-zinc-600">Loading scan...</p>;
+  if (scanQuery.isLoading) return <p className="text-sm text-slate">Loading scan...</p>;
   if (scanQuery.error) return <p className="text-sm font-medium text-rose-700">{scanQuery.error.message}</p>;
 
   const scan = scanQuery.data;
@@ -41,26 +41,26 @@ export default function ScanDetail() {
     <section className="space-y-6">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-normal">Scan Detail</h1>
-          <p className="text-sm text-zinc-600">Scan ID: {scan.id}</p>
+          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Scan Detail</h1>
+          <p className="font-mono text-xs text-slate">Scan ID: {scan.id}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-lg bg-zinc-900 px-3 py-1.5 text-sm font-semibold text-white">{scan.status}</span>
-          <span className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700">
+          <span className="rounded-lg bg-ink px-3 py-1.5 font-mono text-xs font-semibold text-white">{scan.status}</span>
+          <span className="rounded-lg border border-hairline bg-surface px-3 py-1.5 font-mono text-xs font-medium text-slate">
             {scan.pagesScanned} pages scanned
           </span>
         </div>
       </div>
 
       {ACTIVE_STATUSES.has(scan.status) ? (
-        <div className="flex items-center gap-2 rounded-lg border border-sky-200 bg-sky-50 p-4 text-sm font-medium text-sky-800">
+        <div className="flex items-center gap-2 rounded-lg border border-sky-200 bg-sky-50 p-4 font-mono text-xs font-medium text-sky-800">
           <RefreshCcw className="h-4 w-4 animate-spin" aria-hidden="true" />
           Scan in progress... Polling active results.
         </div>
       ) : null}
 
       {scan.status === "FAILED" ? (
-        <div className="flex items-center gap-2 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800">
+        <div className="flex items-center gap-2 rounded-lg border border-rose-200 bg-rose-50 p-4 font-mono text-xs font-medium text-rose-800">
           <AlertTriangle className="h-4 w-4" aria-hidden="true" />
           Scan execution failed.
         </div>
@@ -77,16 +77,16 @@ export default function ScanDetail() {
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-zinc-950">Violations</h2>
-          <span className="text-sm font-medium text-zinc-600">{scan.violations.length} found</span>
+          <h2 className="font-display text-lg font-semibold text-ink">Violations</h2>
+          <span className="font-mono text-xs font-medium text-slate">{scan.violations.length} found</span>
         </div>
 
         {scan.status === "COMPLETED" && scan.violations.length === 0 ? (
-          <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-6 text-emerald-900 shadow-sm">
-            <CheckCircle className="h-6 w-6 shrink-0 text-emerald-600" aria-hidden="true" />
+          <div className="flex items-center gap-3 rounded-xl border border-teal-200 bg-teal-50 p-6 text-teal-900 shadow-sm">
+            <CheckCircle className="h-6 w-6 shrink-0 text-signal" aria-hidden="true" />
             <div>
-              <h3 className="font-semibold">No WCAG Violations Found</h3>
-              <p className="text-sm text-emerald-700">
+              <h3 className="font-display text-base font-semibold">No WCAG Violations Found</h3>
+              <p className="text-sm text-teal-800">
                 Great news! No accessibility violations were detected across {scan.pagesScanned} scanned pages.
               </p>
             </div>

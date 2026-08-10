@@ -52,14 +52,14 @@ export default function GithubConnectPanel({
   }
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
+    <div className="rounded-lg border border-hairline bg-surface p-5 shadow-sm">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <GitBranch className="h-4 w-4 text-zinc-700" aria-hidden="true" />
-            <h3 className="text-sm font-semibold text-zinc-900">GitHub PR Automation</h3>
+            <GitBranch className="h-4 w-4 text-slate" aria-hidden="true" />
+            <h3 className="font-display text-sm font-semibold text-ink">GitHub PR Automation</h3>
           </div>
-          <p className="text-xs text-zinc-600">
+          <p className="text-xs text-slate">
             {githubRepo
               ? `Connected repository: ${githubRepo}`
               : "Connect your GitHub repository to automatically create pull requests for generated fixes."}
@@ -68,8 +68,8 @@ export default function GithubConnectPanel({
 
         {githubRepo ? (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-800">
-              <GitBranch className="h-3.5 w-3.5 text-zinc-600" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-hairline bg-canvas px-3 py-1.5 font-mono text-xs font-semibold text-ink">
+              <GitBranch className="h-3.5 w-3.5 text-slate" aria-hidden="true" />
               {githubRepo}
             </span>
             <button
@@ -82,7 +82,7 @@ export default function GithubConnectPanel({
                   : "Open GitHub Pull Request with generated fixes"
               }
               aria-label="Open GitHub Pull Request with generated fixes"
-              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-3 text-xs font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-signal px-3 text-xs font-semibold text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <GitPullRequest className="h-4 w-4" aria-hidden="true" />
               {openPrMutation.isPending ? "Opening PR..." : "Open Pull Request"}
@@ -96,12 +96,12 @@ export default function GithubConnectPanel({
               onChange={(e) => setRepoInput(e.target.value)}
               placeholder="owner/repository"
               aria-label="GitHub repository in owner/repo format"
-              className="h-9 rounded-lg border border-zinc-300 px-3 text-xs outline-none ring-emerald-500 focus:ring-2"
+              className="h-9 rounded-lg border border-hairline px-3 font-mono text-xs text-ink outline-none ring-signal focus:ring-2"
             />
             <button
               type="submit"
               disabled={connectMutation.isPending}
-              className="inline-flex h-9 items-center justify-center rounded-lg bg-zinc-900 px-3 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50"
+              className="inline-flex h-9 items-center justify-center rounded-lg bg-ink px-3 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50"
             >
               {connectMutation.isPending ? "Connecting..." : "Connect Repo"}
             </button>
@@ -122,14 +122,14 @@ export default function GithubConnectPanel({
       ) : null}
 
       {openedPrUrl ? (
-        <div className="mt-3 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-xs font-medium text-emerald-900">
-          <GitPullRequest className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+        <div className="mt-3 flex items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 p-3 text-xs font-medium text-teal-900">
+          <GitPullRequest className="h-4 w-4 text-signal" aria-hidden="true" />
           <span>Pull Request created:</span>
           <a
             href={openedPrUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 font-semibold underline hover:text-emerald-700"
+            className="inline-flex items-center gap-1 font-mono font-semibold underline hover:text-teal-700"
           >
             {openedPrUrl}
             <ExternalLink className="h-3 w-3" aria-hidden="true" />

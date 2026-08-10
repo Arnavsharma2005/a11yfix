@@ -6,7 +6,7 @@ interface FixDiffViewerProps {
 
 export default function FixDiffViewer({ diff }: FixDiffViewerProps) {
   return (
-    <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
+    <div className="overflow-hidden rounded-lg border border-hairline bg-surface">
       <ReactDiffViewer
         oldValue=""
         newValue={diff}
@@ -22,6 +22,7 @@ export default function FixDiffViewer({ diff }: FixDiffViewerProps) {
             }
           },
           contentText: {
+            fontFamily: '"IBM Plex Mono", SFMono-Regular, monospace',
             fontSize: "12px",
             lineHeight: "18px"
           }
