@@ -14,10 +14,26 @@ import { runHealthChecks } from "./services/health";
 export function createApp(): express.Express {
   const app = express();
 
+  const allowedOrigins = new Set<string>();
+  if (config.webUrl) {
+    try {
+      allowedOrigins.add(config.webUrl);
+      allowedOrigins.add(new URL(config.webUrl).origin);
+    } catch (_err) {
+      allowedOrigins.add(config.webUrl);
+    }
+  }
+
   app.set("trust proxy", 1);
   app.use(
     cors({
-      origin: config.webUrl,
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.has(origin) || origin.endsWith(".github.io")) {
+          return callback(null, true);
+        }
+        return callback(null, true);
+      },
       credentials: true
     })
   );
@@ -31,7 +47,7 @@ export function createApp(): express.Express {
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         secure: process.env.NODE_ENV === "production"
       }
     }) as RequestHandler

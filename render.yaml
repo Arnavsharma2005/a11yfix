@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: a11yfix-api
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: pnpm install --no-frozen-lockfile && pnpm prisma:generate && pnpm --filter @a11yfix/shared-types build && pnpm --filter @a11yfix/api build
+    preDeployCommand: npx prisma migrate deploy --schema apps/api/src/db/prisma/schema.prisma
+    startCommand: pnpm --filter @a11yfix/api start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: WEB_URL
+        value: https://arnavsharma2005.github.io/a11yfix
+      - key: DATABASE_URL
+        fromDatabase:
+          name: a11yfix-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: a11yfix-redis
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: TOKEN_ENCRYPTION_KEY
+        generateValue: true
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
+
+databases:
+  - name: a11yfix-db
+    databaseName: a11yfix
+    user: a11yfix_user
+    plan: free
+    region: singapore
+
+redis:
+  - name: a11yfix-redis
+    plan: free
+    region: singapore
+    maxmemoryPolicy: noeviction
